@@ -36,39 +36,39 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, message);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(IllegalArgumentException.class) //Нет обязательного fullName при создании
     public ResponseEntity<ErrorResponseDto> handleIllegalArgument(
             IllegalArgumentException e
     ){
         return build(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ExceptionHandler(HttpMessageNotReadableException.class) // Битый JSON, неверный status
     public ResponseEntity<ErrorResponseDto> handleUnreadable(
             HttpMessageNotReadableException e
     ){
         return build(HttpStatus.BAD_REQUEST,"Malformed JSON or invalid field value");
     }
 
-//    @ExceptionHandler(NoResourceFoundException.class)
-//    public ResponseEntity<ErrorResponseDto> handleNoResource(NoResourceFoundException ex) {
-//        return build(HttpStatus.NOT_FOUND, "Resource not found");
-//    }
-//
-//    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-//    public ResponseEntity<ErrorResponseDto> handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex) {
-//        return build(HttpStatus.METHOD_NOT_ALLOWED, ex.getMessage());
-//    }
-//
-//    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-//    public ResponseEntity<ErrorResponseDto> handleUnsupportedMedia(HttpMediaTypeNotSupportedException ex) {
-//        return build(HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getMessage());
-//    }
-//    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-//    public ResponseEntity<ErrorResponseDto> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-//        return build(HttpStatus.BAD_REQUEST,
-//                "Invalid value '" + ex.getValue() + "' for parameter '" + ex.getName() + "'");
-//    }
+    @ExceptionHandler(NoResourceFoundException.class) //Такого URL нет
+    public ResponseEntity<ErrorResponseDto> handleNoResource(NoResourceFoundException ex) {
+        return build(HttpStatus.NOT_FOUND, "Resource not found");
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class) //URL есть, но метод для него не поддерживается(405, Method 'PATCH' is not supported)
+    public ResponseEntity<ErrorResponseDto> handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex) {
+        return build(HttpStatus.METHOD_NOT_ALLOWED, ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class) //Тело пришло не в формате JSON
+    public ResponseEntity<ErrorResponseDto> handleUnsupportedMedia(HttpMediaTypeNotSupportedException ex) {
+        return build(HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getMessage());
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class) //Параметр пути нельзя привести к типу
+    public ResponseEntity<ErrorResponseDto> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return build(HttpStatus.BAD_REQUEST,
+                "Invalid value '" + ex.getValue() + "' for parameter '" + ex.getName() + "'");
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleOther(
             Exception e
